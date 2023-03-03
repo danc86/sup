@@ -41,6 +41,12 @@ jobs:
     - name: Install pandoc
       run: brew install pandoc
       if: runner.os == 'macOS'
+    # MacOS apparently ships incomplete ncurses:
+    # https://github.com/sup-heliotrope/ncursesw-ruby/pull/39
+    # Ensure the ncurses from Homebrew takes priority over the system copy.
+    - name: Use Homebrew ncurses
+      run: brew environment ncurses >>$GITHUB_ENV
+      if: runner.os == 'macOS'
     - uses: actions/checkout@v3
       with:
         submodules: recursive
